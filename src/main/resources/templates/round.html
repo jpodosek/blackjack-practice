@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blackjack</title>
+</head>
+<body>
+	<h1>Blackjack</h1>
+	<div>Account Balance: ${{ accountBalance }} </div>
+	<div>Current Bet: ${{ betAmount }} </div>
+	<div>Cards Left: {{cardsLeft}}</div><br><br>
+	<div>Dealer
+   		<div>| {{ dealerHand.cards.0.rank }} of {{ dealerHand.cards.0.suit }} || ?? | </div> </div>
+   	<br>
+	<hr>
+	<br>
+	<div>{{#playerName}} {{ . }} {{/playerName}} 
+		<div>{{#playerHand.cards}} | {{rank}} of {{suit}} | {{/playerHand.cards}}</div></div><br>
+		
+	<div>Your score: {{#playerHandScore}} {{ . }} {{/playerHandScore}}</div>
+
+	<form method="post" action="hit">
+		 <button type="button">Hit</button> 
+	</form>
+	
+	<form method="post" action="stay">
+		 <button type="button">Stay</button> 
+	</form>
+	
+
+</body>
+</html>

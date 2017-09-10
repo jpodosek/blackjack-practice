@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blackjack</title>
+</head>
+<body>
+	<h1>Blackjack</h1>
+	<h2>Welcome {{#playerName}} {{ . }} {{/playerName}}!</h2>
+	<div>Account Balance: ${{ accountBalance }} </div><br>
+
+	<form method="post" action="round">
+		Place your bet:<input type="number" name="betAmount" required="true"> <br>
+		<br> <input type="submit" value="Submit">
+	</form>
+	
+
+</body>
+</html>
