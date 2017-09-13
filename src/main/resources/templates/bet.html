@@ -5,11 +5,11 @@
 </head>
 <body>
 	<h1>Blackjack</h1>
-	<h2>Welcome {{#playerName}} {{ . }} {{/playerName}}!</h2>
-	<div>Account Balance: ${{ accountBalance }} </div><br>
+	<h2>Welcome {{player.playerName}}!</h2>
+	<div>Account Balance: ${{ player.accountBalance }} </div><br>
 
 	<form method="post" action="round">
-		Place your bet:<input type="number" name="betAmount" required="true"> <br>
+		Place your bet:<input required type="number" name="betAmount"> <br>
 		<br> <input type="submit" value="Submit">
 	</form>
 	

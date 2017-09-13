@@ -8,9 +8,9 @@ public class Player {
 	private Hand hand;
 	
 	public Player() {
-		 String playerName = null;
-		 double accountBalance = 0.0;
-		 double betAmount = 0.0;
+		 this.playerName = null;
+		 this.accountBalance = 0.0;
+		 this.betAmount = 0.0;
 		}
 
 	public String getPlayerName() {
@@ -48,7 +48,6 @@ public class Player {
 	public int getPlayerHandScore() {
 		return hand.getHandScore();
 	}
-	
 	
 	
 	

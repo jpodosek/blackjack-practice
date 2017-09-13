@@ -8,15 +8,15 @@ public class Hand {
 	private ArrayList<Card> hand ;
 	private int handScore;
 	
+	
 	public Hand() {
 		hand = new ArrayList<Card>();
 		handScore = 0;
 		
 	}
 	
-	public void addCard(Card card) {
-		//Card card = deck.drawCard();
-		hand.add(card);	
+	public void addCard(Card card) {	
+		hand.add(card);		
 	}
 	
 	public void removeCard(Card card) {
@@ -30,8 +30,16 @@ public class Hand {
 		return handScore;		
 	}
 	
+	public void setHandScore(int handScore) {
+		this.handScore = handScore;
+	}
 	public ArrayList<Card> getCards() {
 		return hand;
+	}
+	
+	//returns number of cards in hand
+	public int getHandSize() {
+		return hand.size();
 	}
 
 

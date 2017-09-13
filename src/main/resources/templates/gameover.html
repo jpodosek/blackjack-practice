@@ -4,12 +4,13 @@
 <title>Blackjack</title>
 </head>
 <body>
-	<h1>Blackjack</h1>
+	<h1>YOU BUSTED!!!</h1>
+	
 	<div>Account Balance: ${{ player.accountBalance }} </div>
-	<div>Current Bet: ${{ player.betAmount }} </div>
 	<div>Cards Left: {{deck.cardsLeft}}</div><br><br>
 	<div>Dealer
-   		<div>| {{ dealer.hand.cards.0.rank }} of {{ dealer.hand.cards.0.suit }} || ?? | </div>
+   		<div>{{#dealer.hand.cards}} | {{rank}} of {{suit}} | {{/dealer.hand.cards}}</div>
+   		
    		
    		 </div>
    	<br>
@@ -19,15 +20,12 @@
 		<div>{{#player.hand.cards}} | {{rank}} of {{suit}} | {{/player.hand.cards}}</div></div><br>
 		
 	<div>Your hand score: {{player.playerHandScore}}</div>
-
-	<form method="post" action="hit">
-		  <input type="submit" name="hitButton" value="Hit">
+	
+	<h2>To keep playing, place your bet:</h2>
+	<form method="post" action="round">
+		Place your bet:<input required type="number" name="betAmount"> <br>
+		<br> <input type="submit" value="Submit">
 	</form>
 	
-	<form method="post" action="stay">
-	 	<input type="submit" name="stayButton" value="Stay">
-	</form>
-	
-
 </body>
 </html>

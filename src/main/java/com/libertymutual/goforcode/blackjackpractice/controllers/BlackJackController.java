@@ -15,124 +15,109 @@ import com.libertymutual.goforcode.blackjackpractice.models.Player;
 @RequestMapping("/")
 public class BlackJackController {
 	private Deck deck;
-	private String playerName;
-	private double accountBalance;
-	private double betAmount;
+	// private String playerName;
+	// private double accountBalance;
+	Hand playerHand, dealerHand;
+	// private double betAmount;
 	private Player player, dealer;
-	private Hand playerHand, dealerHand;
-	private int cardsLeft;
-	private int playerHandScore;
-	private Model model;
-	
-	
+	// private int cardsLeft;
+	// private int playerHandScore;
+	// private Model model;
+
 	BlackJackController() {
 		deck = new Deck();
-		cardsLeft = deck.getCardsLeft();
+		// cardsLeft = deck.getCardsLeft();
 		player = new Player();
 		dealer = new Player();
 	}
-	
+
 	@GetMapping("")
 	public String showDefault(Model model) {
-		return "default";
-			
-	}
-	
-	@PostMapping("setup")
-	public String setUpGame(Model model, @RequestParam(name = "playerName") String playerName, @RequestParam(name = "accountBalance") double accountBalance  ) {
-		player.setAccountBalance(accountBalance);
-		this.accountBalance = player.getAccountBalance();
-		player.setPlayerName(playerName);
-		this.playerName = player.getPlayerName();
-		model.addAttribute("playerName", this.playerName);
-		model.addAttribute("accountBalance", this.accountBalance);
-		return "bet";
-			
-	}
-	
-	@PostMapping("round")
-	public String startRound(Model model, @RequestParam(name = "betAmount") double betAmount  ) {	
-		this.betAmount = betAmount;	
-		accountBalance -= betAmount;
+		//// ˅˅ For testing purposes  ˅˅  ///
+		player.setAccountBalance(0);
+		deck = new Deck();
+		//// ^^ *******************  ^^  ///
 		
-		//Create hands and deal cards
+		return "default";
+
+	}
+
+	@PostMapping("setup")
+	public String setUpGame(Model model, @RequestParam(name = "playerName") String playerName,
+			@RequestParam(name = "accountBalance") double accountBalance) {
+		player.setAccountBalance(accountBalance);
+		player.setPlayerName(playerName);
+		model.addAttribute("player", player);
+		return "bet";
+
+	}
+
+	@PostMapping("round")
+	public String startRound(Model model, @RequestParam(name = "betAmount") double betAmount) {
+		player.setBetAmount(betAmount);
+		// this.betAmount = betAmount;
+		player.setAccountBalance(player.getAccountBalance() - betAmount); // subtract bet from player's account balance
+
+		// Create hands and deal cards
 		playerHand = new Hand();
 		dealerHand = new Hand();
-		playerHand.addCard(deck.drawCard()); //draw card from deck and add to hand
+		playerHand.addCard(deck.drawCard()); // draw card from deck and add to hand
 		dealerHand.addCard(deck.drawCard());
 		playerHand.addCard(deck.drawCard());
 		dealerHand.addCard(deck.drawCard());
-		
-		cardsLeft = deck.getCardsLeft();
-		playerHandScore = playerHand.getHandScore();	
-		
-//		model.addAttribute("playerName", playerName);
-//		model.addAttribute("playerHand", playerHand);
-//		model.addAttribute("dealerHand", dealerHand);
-//		model.addAttribute("betAmount", this.betAmount);
-//		model.addAttribute("playerHandScore", playerHandScore);
-//		model.addAttribute("accountBalance", accountBalance);
-//		model.addAttribute("cardsLeft", cardsLeft);
-		storeGameInfo(model);
+
+		player.setHand(playerHand); // add hands to player objects; only need to add player to model this way, and
+									// it makes more intuitive sense
+		dealer.setHand(dealerHand);
+		// System.out.println("dealer hand size:" + dealerHand.getHandSize());
+		// System.out.println("dealer hand - get cards:" + dealerHand.getCards());
+
+		model.addAttribute("player", player);
+		model.addAttribute("dealer", dealer);
+		model.addAttribute("deck", deck);
+
 		return "round";
-			
 	}
-		
-		@PostMapping("hit")
-		public String hit(Model model) {
+
+	@PostMapping("hit")
+	public String hit(Model model) {
+		String pageDestination = null;
+		playerHand.addCard(deck.drawCard());
+		player.setHand(playerHand);
 			
-			playerHand.addCard(deck.drawCard());
-			cardsLeft = deck.getCardsLeft();
-			playerHandScore = playerHand.getHandScore();
-			
-		
-			
-//			model.addAttribute("playerName", playerName);
-//			model.addAttribute("playerHand", playerHand);
-//			model.addAttribute("dealerHand", dealerHand);
-//			model.addAttribute("betAmount", betAmount);
-//			model.addAttribute("playerHandScore", playerHandScore);
-//			model.addAttribute("accountBalance", accountBalance);
-//			model.addAttribute("cardsLeft", cardsLeft);
-			storeGameInfo(model);
-			return "round";
+		//BUST
+		if (playerHand.getHandScore() > 21)	 {
+				player.setBetAmount(0.00);
+				double accountBalance = player.getAccountBalance() - player.getBetAmount();
+				player.setAccountBalance(accountBalance);
+
+				pageDestination = "gameover";
+		} else {
+				//follow happy path below back to round page	
+			pageDestination = "round";
 		}
-		
-		
-		@PostMapping("stay")
-		public String stay(Model model) {
 			
-			//while dealer score is < 16
-			//dealer adds cards
-			//calculate dealer score
-			
-			cardsLeft = deck.getCardsLeft();
-			playerHandScore = playerHand.getHandScore();
-			
-	
-//			model.addAttribute("playerName", playerName);
-//			model.addAttribute("playerHand", playerHand);
-//			model.addAttribute("dealerHand", dealerHand);
-//			model.addAttribute("betAmount", betAmount);
-//			model.addAttribute("playerHandScore", playerHandScore);
-//			model.addAttribute("accountBalance", accountBalance);
-//			model.addAttribute("cardsLeft", cardsLeft);
-			storeGameInfo(model);
-			return "round";
-		}
-		
-		public void storeGameInfo(Model model) {
-			//passing in a model to function will set replace model for entire class;
-			this.model = model; 
-			model.addAttribute("playerName", playerName);
-			model.addAttribute("playerHand", playerHand);
-			model.addAttribute("dealerHand", dealerHand);
-			model.addAttribute("betAmount", betAmount);
-			model.addAttribute("playerHandScore", playerHandScore);
-			model.addAttribute("accountBalance", accountBalance);
-			model.addAttribute("cardsLeft", cardsLeft);
-			
-		}
-		
-		
+		model.addAttribute("player", player);
+		model.addAttribute("dealer", dealer);
+		model.addAttribute("playerHand", playerHand);
+		model.addAttribute("deck", deck);
+		return pageDestination;
+	}
+
+	@PostMapping("stay")
+	public String stay(Model model) {
+
+		// while dealer score is < 16
+		// dealer adds cards
+		// calculate dealer score
+
+		model.addAttribute("player", player);
+		model.addAttribute("dealer", dealer);
+		model.addAttribute("dealerHand", dealerHand);
+		model.addAttribute("playerHand", playerHand);
+		model.addAttribute("deck", deck);
+
+		return "round";
+	}
+
 }
