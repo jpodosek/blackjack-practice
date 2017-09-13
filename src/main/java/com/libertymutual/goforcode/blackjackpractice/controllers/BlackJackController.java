@@ -15,14 +15,8 @@ import com.libertymutual.goforcode.blackjackpractice.models.Player;
 @RequestMapping("/")
 public class BlackJackController {
 	private Deck deck;
-	// private String playerName;
-	// private double accountBalance;
-	Hand playerHand, dealerHand;
-	// private double betAmount;
+	private Hand playerHand, dealerHand;
 	private Player player, dealer;
-	// private int cardsLeft;
-	// private int playerHandScore;
-	// private Model model;
 
 	BlackJackController() {
 		deck = new Deck();
@@ -39,7 +33,6 @@ public class BlackJackController {
 		//// ^^ *******************  ^^  ///
 		
 		return "default";
-
 	}
 
 	@PostMapping("setup")
@@ -71,7 +64,13 @@ public class BlackJackController {
 		dealer.setHand(dealerHand);
 		// System.out.println("dealer hand size:" + dealerHand.getHandSize());
 		// System.out.println("dealer hand - get cards:" + dealerHand.getCards());
-
+		//*****Testing
+		System.out.println("playerHand.getCards()" + playerHand.getCards());
+		System.out.println("playerHand.getScore()" + playerHand.getHandScore());
+		System.out.println("player.getPlayerHandScore()" + player.getPlayerHandScore());
+		System.out.println("player.getHand().getHandScore()" + player.getHand().getHandScore());
+		//
+		
 		model.addAttribute("player", player);
 		model.addAttribute("dealer", dealer);
 		model.addAttribute("deck", deck);
@@ -83,8 +82,12 @@ public class BlackJackController {
 	public String hit(Model model) {
 		String pageDestination = null;
 		playerHand.addCard(deck.drawCard());
-		player.setHand(playerHand);
-			
+		//player.setHand(playerHand);
+		
+		System.out.println("playerHand.getCards()" + playerHand.getCards());
+		System.out.println("playerHand.getScore()" + playerHand.getHandScore());
+		System.out.println("player.getPlayerHandScore()" + player.getPlayerHandScore());
+		System.out.println("player.getHand().getHandScore()" + player.getHand().getHandScore());
 		//BUST
 		if (playerHand.getHandScore() > 21)	 {
 				player.setBetAmount(0.00);
@@ -99,7 +102,7 @@ public class BlackJackController {
 			
 		model.addAttribute("player", player);
 		model.addAttribute("dealer", dealer);
-		model.addAttribute("playerHand", playerHand);
+		//model.addAttribute("playerHand", playerHand);
 		model.addAttribute("deck", deck);
 		return pageDestination;
 	}
@@ -113,8 +116,8 @@ public class BlackJackController {
 
 		model.addAttribute("player", player);
 		model.addAttribute("dealer", dealer);
-		model.addAttribute("dealerHand", dealerHand);
-		model.addAttribute("playerHand", playerHand);
+		//model.addAttribute("dealerHand", dealerHand);
+		//model.addAttribute("playerHand", playerHand);
 		model.addAttribute("deck", deck);
 
 		return "round";

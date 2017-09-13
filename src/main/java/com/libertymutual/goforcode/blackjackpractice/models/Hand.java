@@ -6,13 +6,11 @@ import java.util.List;
 
 public class Hand {
 	private ArrayList<Card> hand ;
-	private int handScore;
+	//private int handScore;
 	
 	
 	public Hand() {
-		hand = new ArrayList<Card>();
-		handScore = 0;
-		
+		hand = new ArrayList<Card>();		
 	}
 	
 	public void addCard(Card card) {	
@@ -24,15 +22,13 @@ public class Hand {
 	}
 	
 	public int getHandScore() {
+		int handScore = 0;
 		for (Card card : hand) {	
 			handScore += card.getCardValue();		
 		}			
 		return handScore;		
 	}
 	
-	public void setHandScore(int handScore) {
-		this.handScore = handScore;
-	}
 	public ArrayList<Card> getCards() {
 		return hand;
 	}
@@ -42,16 +38,12 @@ public class Hand {
 		return hand.size();
 	}
 
-
 //	@Override 
 // 	public String toString() { 
 //		for (Card c : hand) 
 //		c.toString(); 
 //		
 //		return hand;
-//	}
-	
-	
-	
+//	}	
 
 }

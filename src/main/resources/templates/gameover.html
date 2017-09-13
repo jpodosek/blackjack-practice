@@ -10,16 +10,14 @@
 	<div>Cards Left: {{deck.cardsLeft}}</div><br><br>
 	<div>Dealer
    		<div>{{#dealer.hand.cards}} | {{rank}} of {{suit}} | {{/dealer.hand.cards}}</div>
-   		
-   		
-   		 </div>
+   		</div>
    	<br>
 	<hr>
 	<br>
 	<div>{{ player.playerName }}
 		<div>{{#player.hand.cards}} | {{rank}} of {{suit}} | {{/player.hand.cards}}</div></div><br>
 		
-	<div>Your hand score: {{player.playerHandScore}}</div>
+	<div>Your hand score: {{player.hand.handScore}}</div>
 	
 	<h2>To keep playing, place your bet:</h2>
 	<form method="post" action="round">
