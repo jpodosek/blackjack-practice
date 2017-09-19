@@ -8,6 +8,8 @@
 	<div>Account Balance: ${{ player.accountBalance }} </div>
 	<div>Current Bet: ${{ player.betAmount }} </div>
 	<div>Cards Left: {{deck.cardsLeft}}</div><br><br>
+
+	
 	<div>Dealer
    		<div>| {{ dealer.hand.cards.0.rank }} of {{ dealer.hand.cards.0.suit }} || ?? | </div>
    		
@@ -18,7 +20,7 @@
 	<div>{{ player.playerName }}
 		<div>{{#player.hand.cards}} | {{rank}} of {{suit}} | {{/player.hand.cards}}</div></div><br>
 		
-	<div>Your hand score: {{player.playerHandScore}}</div>
+	<div>Your hand score: {{player.hand.bestHandScore}}</div>
 
 	<form method="post" action="hit">
 		  <input type="submit" name="hitButton" value="Hit">
@@ -27,7 +29,6 @@
 	<form method="post" action="stay">
 	 	<input type="submit" name="stayButton" value="Stay">
 	</form>
-	
 
 </body>
 </html>

@@ -45,9 +45,9 @@ public class Player {
 		this.hand = hand;
 	}
 	
-	public int getPlayerHandScore() {
-		return hand.getHandScore();
-	}
+//	public int getPlayerHandScore() {
+//		return hand.getBestHandScore();
+//	}
 	
 	
 	

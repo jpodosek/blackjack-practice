@@ -4,11 +4,13 @@
 <title>Blackjack</title>
 </head>
 <body>
-	<h1>YOU BUSTED!!!</h1>
-	
+
+	<h1>{{#outcome}} {{.}} {{/outcome}}</h1>
+
 	<div>Account Balance: ${{ player.accountBalance }} </div>
 	<div>Cards Left: {{deck.cardsLeft}}</div><br><br>
 	<div>Dealer
+		<div>Dealer hand score: {{dealer.hand.bestHandScore}}</div>
    		<div>{{#dealer.hand.cards}} | {{rank}} of {{suit}} | {{/dealer.hand.cards}}</div>
    		</div>
    	<br>
@@ -17,7 +19,7 @@
 	<div>{{ player.playerName }}
 		<div>{{#player.hand.cards}} | {{rank}} of {{suit}} | {{/player.hand.cards}}</div></div><br>
 		
-	<div>Your hand score: {{player.hand.handScore}}</div>
+	<div>Your hand score: {{player.hand.bestHandScore}}</div>
 	
 	<h2>To keep playing, place your bet:</h2>
 	<form method="post" action="round">

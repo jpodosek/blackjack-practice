@@ -17,6 +17,8 @@ public class BlackJackController {
 	private Deck deck;
 	private Hand playerHand, dealerHand;
 	private Player player, dealer;
+	//private boolean isUserTurn;
+	private String outcome = null;
 
 	BlackJackController() {
 		deck = new Deck();
@@ -27,11 +29,10 @@ public class BlackJackController {
 
 	@GetMapping("")
 	public String showDefault(Model model) {
-		//// ˅˅ For testing purposes  ˅˅  ///
+		//// ˅˅ For testing purposes ˅˅ ///
 		player.setAccountBalance(0);
 		deck = new Deck();
-		//// ^^ *******************  ^^  ///
-		
+		//// ^^ ******************* ^^ ///
 		return "default";
 	}
 
@@ -47,6 +48,7 @@ public class BlackJackController {
 
 	@PostMapping("round")
 	public String startRound(Model model, @RequestParam(name = "betAmount") double betAmount) {
+		//isUserTurn = true;
 		player.setBetAmount(betAmount);
 		// this.betAmount = betAmount;
 		player.setAccountBalance(player.getAccountBalance() - betAmount); // subtract bet from player's account balance
@@ -59,18 +61,8 @@ public class BlackJackController {
 		playerHand.addCard(deck.drawCard());
 		dealerHand.addCard(deck.drawCard());
 
-		player.setHand(playerHand); // add hands to player objects; only need to add player to model this way, and
-									// it makes more intuitive sense
+		player.setHand(playerHand);
 		dealer.setHand(dealerHand);
-		// System.out.println("dealer hand size:" + dealerHand.getHandSize());
-		// System.out.println("dealer hand - get cards:" + dealerHand.getCards());
-		//*****Testing
-		System.out.println("playerHand.getCards()" + playerHand.getCards());
-		System.out.println("playerHand.getScore()" + playerHand.getHandScore());
-		System.out.println("player.getPlayerHandScore()" + player.getPlayerHandScore());
-		System.out.println("player.getHand().getHandScore()" + player.getHand().getHandScore());
-		//
-		
 		model.addAttribute("player", player);
 		model.addAttribute("dealer", dealer);
 		model.addAttribute("deck", deck);
@@ -82,42 +74,77 @@ public class BlackJackController {
 	public String hit(Model model) {
 		String pageDestination = null;
 		playerHand.addCard(deck.drawCard());
-		//player.setHand(playerHand);
-		
-		System.out.println("playerHand.getCards()" + playerHand.getCards());
-		System.out.println("playerHand.getScore()" + playerHand.getHandScore());
-		System.out.println("player.getPlayerHandScore()" + player.getPlayerHandScore());
-		System.out.println("player.getHand().getHandScore()" + player.getHand().getHandScore());
-		//BUST
-		if (playerHand.getHandScore() > 21)	 {
-				player.setBetAmount(0.00);
-				double accountBalance = player.getAccountBalance() - player.getBetAmount();
-				player.setAccountBalance(accountBalance);
+		player.setHand(playerHand);
 
-				pageDestination = "gameover";
+		// BUST
+		if (playerHand.getBestHandScore() > 21) {
+			outcome = "You busted!!!";
+			player.setBetAmount(0.00);
+			double accountBalance = player.getAccountBalance() - player.getBetAmount();
+			player.setAccountBalance(accountBalance);
+
+			pageDestination = "gameover";
 		} else {
-				//follow happy path below back to round page	
+			// follow happy path below back to round page
 			pageDestination = "round";
 		}
-			
+		model.addAttribute("outcome", outcome);
 		model.addAttribute("player", player);
 		model.addAttribute("dealer", dealer);
-		//model.addAttribute("playerHand", playerHand);
 		model.addAttribute("deck", deck);
+		System.out.print(pageDestination);
 		return pageDestination;
 	}
 
 	@PostMapping("stay")
 	public String stay(Model model) {
+		//isUserTurn = false;
+		while (dealerHand.getBestHandScore() < 16) {
+			dealerHand.addCard(deck.drawCard());
 
-		// while dealer score is < 16
-		// dealer adds cards
-		// calculate dealer score
+		}
+		dealer.setHand(dealerHand);
 
+		// put check win logic method here
+		if (dealerHand.getBestHandScore() > 21) {
+			outcome = "Dealer busted! You earn 2 to 1"; // 2 to 1, so if you bet $20, the dealer gives you $20 more
+			player.setAccountBalance(player.getAccountBalance() + 2 * (player.getBetAmount()));
+
+		} else if (dealerHand.getBestHandScore() == playerHand.getBestHandScore()) {
+			outcome = "Push! You keep your bet."; // both at 21 or less; same outcome
+
+		} else if (dealerHand.getBestHandScore() > playerHand.getBestHandScore()) {
+			outcome = "Dealer wins! You lose your bet."; // dealer wins, you lose your bet
+			player.setAccountBalance(player.getAccountBalance() - (player.getBetAmount()));
+		
+		} else if (dealerHand.getBestHandScore() != 21 && playerHand.getBestHandScore() == 21) {
+			outcome = "Blackjack! You earn 3 to 2"; // 3 to 2, so if you bet $20, the dealer pays you $30
+			player.setAccountBalance(player.getAccountBalance() + 1.5 * (player.getBetAmount()));
+		
+		} else if (dealerHand.getBestHandScore() < playerHand.getBestHandScore()) {
+			outcome = "Winner! You earn 2 to 1."; // 2 to 1, so if you bet $20, the dealer gives you $20 more
+			player.setAccountBalance(player.getAccountBalance() + 2 * (player.getBetAmount()));
+		
+		} else {
+			outcome = "this should be unreachable logic";
+		}
+
+		player.setBetAmount(0.00);
+
+		model.addAttribute("outcome", outcome);
 		model.addAttribute("player", player);
 		model.addAttribute("dealer", dealer);
-		//model.addAttribute("dealerHand", dealerHand);
-		//model.addAttribute("playerHand", playerHand);
+		model.addAttribute("deck", deck);
+
+		return "gameover";
+	}
+
+	@GetMapping("gameover")
+	public String endOfRound(Model model) {
+		
+		model.addAttribute("outcome", outcome);
+		model.addAttribute("player", player);
+		model.addAttribute("dealer", dealer);
 		model.addAttribute("deck", deck);
 
 		return "round";
