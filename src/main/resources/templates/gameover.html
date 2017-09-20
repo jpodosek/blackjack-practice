@@ -5,9 +5,9 @@
 </head>
 <body>
 
-	<h1>{{#outcome}} {{.}} {{/outcome}}</h1>
+	<h1>{{#outcomeText}} {{.}} {{/outcomeText}}</h1>
 
-	<div>Account Balance: ${{ player.accountBalance }} </div>
+	<div>Account Balance: ${{ user.accountBalance }} </div>
 	<div>Cards Left: {{deck.cardsLeft}}</div><br><br>
 	<div>Dealer
 		<div>Dealer hand score: {{dealer.hand.bestHandScore}}</div>
@@ -16,10 +16,10 @@
    	<br>
 	<hr>
 	<br>
-	<div>{{ player.playerName }}
-		<div>{{#player.hand.cards}} | {{rank}} of {{suit}} | {{/player.hand.cards}}</div></div><br>
+	<div>{{ user.playerName }}
+		<div>{{#user.hand.cards}} | {{rank}} of {{suit}} | {{/user.hand.cards}}</div></div><br>
 		
-	<div>Your hand score: {{player.hand.bestHandScore}}</div>
+	<div>Your hand score: {{user.hand.bestHandScore}}</div>
 	
 	<h2>To keep playing, place your bet:</h2>
 	<form method="post" action="round">

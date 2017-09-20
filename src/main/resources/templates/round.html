@@ -5,8 +5,8 @@
 </head>
 <body>
 	<h1>Blackjack</h1>
-	<div>Account Balance: ${{ player.accountBalance }} </div>
-	<div>Current Bet: ${{ player.betAmount }} </div>
+	<div>Account Balance: ${{ user.accountBalance }} </div>
+	<div>Current Bet: ${{ user.betAmount }} </div>
 	<div>Cards Left: {{deck.cardsLeft}}</div><br><br>
 
 	
@@ -17,10 +17,10 @@
    	<br>
 	<hr>
 	<br>
-	<div>{{ player.playerName }}
-		<div>{{#player.hand.cards}} | {{rank}} of {{suit}} | {{/player.hand.cards}}</div></div><br>
+	<div>{{ user.playerName }}
+		<div>{{#user.hand.cards}} | {{rank}} of {{suit}} | {{/user.hand.cards}}</div></div><br>
 		
-	<div>Your hand score: {{player.hand.bestHandScore}}</div>
+	<div>Your hand score: {{user.hand.bestHandScore}}</div>
 
 	<form method="post" action="hit">
 		  <input type="submit" name="hitButton" value="Hit">
