@@ -164,21 +164,6 @@ public class GamePlay {
 	}
 	
 	
-//	public void reshuffleDeck() {
-//		List<Card> newDeck = new ArrayList<Card>();
-//				
-//		for (Card card : discardPile) {
-//			newDeck.add(card);
-//		}
-//		
-//		for (Card card : deck.getCards()) {
-//			newDeck.add(card);
-//		}
-//		discardPile = new ArrayList<Card>();
-//		deck.setDeck(newDeck);
-//		deck.shuffle();
-//	}
-	
 	
 	public void checkAndReshuffleIfNeeded() {
 	if (deck.isReshuffleNeeded())

@@ -9,7 +9,7 @@
 	<div>Account Balance: ${{ user.accountBalance }} </div><br>
 
 	<form method="post" action="round">
-		Place your bet:<input required type="number" name="betAmount"> <br>
+		Place your bet:<input required type="number" name="betAmount" min="0" max="1000000"> <br>
 		<br> <input type="submit" value="Submit">
 	</form>
 	

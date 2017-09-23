@@ -9,7 +9,7 @@
 <div>Please enter your information to get started: </div> <br>
 	<form method="post" action="setup">
 		Name: <input type="text" name="playerName" required="true"> <br><br>
-		Buy chips: $<input type="number" name="accountBalance" required="true"> <br>
+		Buy chips: $<input type="number" name="accountBalance" required="true" min="0" max="1000000"> <br>
 		<br> <input type="submit" value="Submit">
 	</form>
 </body>
