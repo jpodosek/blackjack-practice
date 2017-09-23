@@ -61,6 +61,10 @@ public class Hand {
 	public int getHandSize() {
 		return hand.size();
 	}
+	
+	public void clearHand() {
+		hand = new ArrayList<Card>();
+	}
 
 	// @Override
 	// public String toString() {

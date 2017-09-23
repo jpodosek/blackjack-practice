@@ -65,21 +65,17 @@ public class BlackJackController {
 	public String hit(Model model) {
 		String pageDestination = null;
 		gamePlayService.hitMe();
-//		playerHand.addCard(deck.drawCard());
-//		user.setHand(playerHand);
 
-		// BUST
-//		if (playerHand.getBestHandScore() > 21) {
-//			outcome = "You busted!!!";
-//			user.setBetAmount(0.00);
-//			double accountBalance = user.getAccountBalance() - user.getBetAmount();
-//			user.setAccountBalance(accountBalance);
 		if (gamePlayService.isUserBusted()) {
+			gamePlayService.checkAndReshuffleIfNeeded();
 			pageDestination = "gameover";
 		} else {
 			// follow happy path below back to round page
 			pageDestination = "round";
 		}
+		
+		
+		
 		model.addAttribute("outcomeText", gamePlayService.getOutcomeText());
 		model.addAttribute("user", gamePlayService.getUser());
 		model.addAttribute("dealer", gamePlayService.getDealer());
@@ -90,32 +86,26 @@ public class BlackJackController {
 	@PostMapping("stay")
 	public String stay(Model model) {
 		
-		gamePlay = new GamePlay(user, dealer, playerHand, dealerHand);
-		
-		while (dealerHand.getBestHandScore() < 16) {
-			dealerHand.addCard(deck.drawCard());
-		}
-		
-		dealer.setHand(dealerHand);	
-		gamePlay.determineOutcome();
-		
-		model.addAttribute("outcome", gamePlay.getOutcome());
-		model.addAttribute("user", user);
-		model.addAttribute("dealer", dealer);
-		model.addAttribute("deck", deck);
+		gamePlayService.dealerHit();
+		gamePlayService.determineOutcome();
+		gamePlayService.checkAndReshuffleIfNeeded();
+		model.addAttribute("outcomeText", gamePlayService.getOutcome());
+		model.addAttribute("user", gamePlayService.getUser());
+		model.addAttribute("dealer", gamePlayService.getDealer());
+		model.addAttribute("deck", gamePlayService.getDeck());
 
 		return "gameover";
 	}
 
-	@GetMapping("gameover")
-	public String endOfRound(Model model) {
-		
-		model.addAttribute("outcome", outcome);
-		model.addAttribute("user", user);
-		model.addAttribute("dealer", dealer);
-		model.addAttribute("deck", deck);
-
-		return "round";
-	}
+//	@GetMapping("gameover")
+//	public String endOfRound(Model model) {
+//		
+//		model.addAttribute("outcome", outcome);
+//		model.addAttribute("user", user);
+//		model.addAttribute("dealer", dealer);
+//		model.addAttribute("deck", deck);
+//
+//		return "round";
+//	}
 
 }

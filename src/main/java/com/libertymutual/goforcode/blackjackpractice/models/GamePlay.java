@@ -16,11 +16,15 @@ public class GamePlay {
 	private double accountBalance;
 	private double betAmount;
 	private int dScore, pScore;
+	private int cardsLeft;
+	private Deck deck; 
+	private List<Card> discardPile;
+	private boolean isReshuffleNeeded;
 
 	public GamePlay() {
 	};
 
-	private Deck deck; // make deck static if using multiple GamePlay instances
+	
 
 	public GamePlay(Player player, Player dealer, Hand playerHand, Hand dealerHand) {
 		this.user = player;
@@ -49,6 +53,8 @@ public class GamePlay {
 
 	public void setupGame(String playerName, double accountBalance) {
 		deck = new Deck();
+		isReshuffleNeeded = false;
+		discardPile = new ArrayList<Card>();
 		user.setPlayerName(playerName);
 		user.setAccountBalance(accountBalance);
 	}
@@ -81,9 +87,18 @@ public class GamePlay {
 			user.setBetAmount(0.00);
 			accountBalance = user.getAccountBalance() - user.getBetAmount();
 			user.setAccountBalance(accountBalance);
+			addCardsToDiscardPile();	
 			return true;
 		}
 		return false;
+	}
+	
+	public void dealerHit() {
+		
+		while (dealerHand.getBestHandScore() < 16) {
+			dealerHand.addCard(deck.drawCard());
+		}
+		dealer.setHand(dealerHand);	
 	}
 
 	public void determineOutcome() {
@@ -115,9 +130,59 @@ public class GamePlay {
 			outcomeText = "this should be unreachable logic";
 		}
 
+		addCardsToDiscardPile();
 		user.setBetAmount(0.00);
 		setOutcome(outcomeText);
-
+	}
+	
+	public void addCardsToDiscardPile() {
+		ArrayList<Card> currentUserHand = userHand.getCards();
+		ArrayList<Card> currentDealerHand = dealerHand.getCards();
+		
+		for (Card card : currentUserHand) {
+			discardPile.add(card);
+		}
+		
+		
+		for (Card card : currentDealerHand) {
+			discardPile.add(card);
+		}
+		
+//		userHand.clearHand();
+//		dealerHand.clearHand();
+		System.out.println(discardPile.size());		
+	}
+	
+	public void reshuffleDeck() {
+		List<Card> currentDeck = deck.getCards();
+				
+		for (Card card : discardPile) {
+			currentDeck.add(card);
+		}
+		discardPile = new ArrayList<Card>();
+		deck.shuffle();
+	}
+	
+	
+//	public void reshuffleDeck() {
+//		List<Card> newDeck = new ArrayList<Card>();
+//				
+//		for (Card card : discardPile) {
+//			newDeck.add(card);
+//		}
+//		
+//		for (Card card : deck.getCards()) {
+//			newDeck.add(card);
+//		}
+//		discardPile = new ArrayList<Card>();
+//		deck.setDeck(newDeck);
+//		deck.shuffle();
+//	}
+	
+	
+	public void checkAndReshuffleIfNeeded() {
+	if (deck.isReshuffleNeeded())
+		reshuffleDeck();
 	}
 
 	public void createDeck() {
@@ -220,4 +285,17 @@ public class GamePlay {
 	public void setDeck(Deck deck) {
 		this.deck = deck;
 	}
+
+
+
+	public List<Card> getDiscardPile() {
+		return discardPile;
+	}
+
+
+
+	public void setDiscardPile(List<Card> discardPile) {
+		this.discardPile = discardPile;
+	}
+
 }
