@@ -16,40 +16,11 @@ public class GamePlay {
 	private double accountBalance;
 	private double betAmount;
 	private int dScore, pScore;
-	private int cardsLeft;
-	private Deck deck; 
+	private Deck deck;
 	private List<Card> discardPile;
 	private boolean isReshuffleNeeded;
-
-	public GamePlay() {
-	};
-
 	
-
-	public GamePlay(Player player, Player dealer, Hand playerHand, Hand dealerHand) {
-		this.user = player;
-		this.dealer = dealer;
-		this.userHand = playerHand;
-		this.dealerHand = dealerHand;
-	}
-
-	public GamePlay(Deck deck, Player player, Player dealer, Hand playerHand, Hand dealerHand) {
-		this.deck = deck;
-		this.user = player;
-		this.dealer = dealer;
-		this.userHand = playerHand;
-		this.dealerHand = dealerHand;
-	}
-
-	public GamePlay(Hand playerHand, Hand dealerHand) {
-		this.userHand = playerHand;
-		this.dealerHand = dealerHand;
-	}
-
-	public GamePlay(Player player, Player dealer) {
-		this.user = player;
-		this.dealer = dealer;
-	}
+	public GamePlay() {};
 
 	public void setupGame(String playerName, double accountBalance) {
 		deck = new Deck();
@@ -60,7 +31,7 @@ public class GamePlay {
 	}
 
 	public void startNewRound(double betAmount) {
-		// ArrayList<Hand> hands = new ArrayList<Hand>();
+		this.setOutcomeText(null);
 		user.setBetAmount(betAmount);
 		user.setAccountBalance(user.getAccountBalance() - betAmount); // subtract bet from player's account balance
 
@@ -76,29 +47,29 @@ public class GamePlay {
 		dealer.setHand(dealerHand);
 	}
 
-	public void hitMe() {
-		userHand.addCard(deck.drawCard());
+	public void hitMe() {	
+		user.getHand().addCard(deck.drawCard());
 		user.setHand(userHand);
 	}
 
 	public boolean isUserBusted() {
 		if (userHand.getBestHandScore() > 21) {
-			setOutcomeText("You busted!!!");
+			setOutcomeText("You busted! You lose your bet.");
 			user.setBetAmount(0.00);
 			accountBalance = user.getAccountBalance() - user.getBetAmount();
 			user.setAccountBalance(accountBalance);
-			addCardsToDiscardPile();	
+			addCardsToDiscardPile();
 			return true;
 		}
 		return false;
 	}
-	
+
 	public void dealerHit() {
-		
+
 		while (dealerHand.getBestHandScore() < 16) {
 			dealerHand.addCard(deck.drawCard());
 		}
-		dealer.setHand(dealerHand);	
+		dealer.setHand(dealerHand);
 	}
 
 	public void determineOutcome() {
@@ -130,44 +101,41 @@ public class GamePlay {
 			outcomeText = "this should be unreachable logic";
 		}
 
-		addCardsToDiscardPile();
+		this.addCardsToDiscardPile();
 		user.setBetAmount(0.00);
-		setOutcome(outcomeText);
+		this.setOutcomeText(outcomeText);
 	}
-	
+
 	public void addCardsToDiscardPile() {
 		ArrayList<Card> currentUserHand = userHand.getCards();
 		ArrayList<Card> currentDealerHand = dealerHand.getCards();
-		
+
 		for (Card card : currentUserHand) {
 			discardPile.add(card);
 		}
-		
-		
+
 		for (Card card : currentDealerHand) {
 			discardPile.add(card);
 		}
-		
-//		userHand.clearHand();
-//		dealerHand.clearHand();
-		System.out.println(discardPile.size());		
+
+		// userHand.clearHand();
+		// dealerHand.clearHand();
+		System.out.println(discardPile.size());
 	}
-	
+
 	public void reshuffleDeck() {
 		List<Card> currentDeck = deck.getCards();
-				
+
 		for (Card card : discardPile) {
 			currentDeck.add(card);
 		}
 		discardPile = new ArrayList<Card>();
 		deck.shuffle();
 	}
-	
-	
-	
+
 	public void checkAndReshuffleIfNeeded() {
-	if (deck.isReshuffleNeeded())
-		reshuffleDeck();
+		if (deck.isReshuffleNeeded())
+			reshuffleDeck();
 	}
 
 	public void createDeck() {
@@ -183,13 +151,7 @@ public class GamePlay {
 		dealer = new Player();
 	}
 
-	public String getOutcome() {
-		return outcomeText;
-	}
-
-	public void setOutcome(String outcome) {
-		this.outcomeText = outcome;
-	}
+	
 
 	public Player getUser() {
 		return user;
@@ -239,12 +201,12 @@ public class GamePlay {
 		this.accountBalance = accountBalance;
 	}
 
-	public double getBetAmount() {
-		return betAmount;
+	public double getBetAmount(Player player) {
+		return player.getBetAmount();
 	}
 
-	public void setBetAmount(double betAmount) {
-		this.betAmount = betAmount;
+	public void setBetAmount(double betAmount, Player player) {
+		player.setBetAmount(betAmount);
 	}
 
 	public int getdScore() {
@@ -271,16 +233,19 @@ public class GamePlay {
 		this.deck = deck;
 	}
 
-
-
 	public List<Card> getDiscardPile() {
 		return discardPile;
 	}
 
-
-
 	public void setDiscardPile(List<Card> discardPile) {
 		this.discardPile = discardPile;
+	}
+
+	public int getCardsLeft() {
+		if (deck != null) {
+			return deck.getCardsLeft();
+		}
+		return 0;
 	}
 
 }

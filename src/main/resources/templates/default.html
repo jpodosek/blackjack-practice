@@ -2,15 +2,85 @@
 <html>
 <head>
 <title>Blackjack</title>
+<link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-	<h1>Welcome to Blackjack!</h1>
 
-<div>Please enter your information to get started: </div> <br>
-	<form method="post" action="setup">
-		Name: <input type="text" name="playerName" required="true"> <br><br>
-		Buy chips: $<input type="number" name="accountBalance" required="true" min="0" max="1000000"> <br>
-		<br> <input type="submit" value="Submit">
-	</form>
+<h1>Online Blackjack</h1>
+{{#preGame}}
+	<div class="pre-game">
+		<div>Please enter your information to get started: </div> 
+		<form method="post" action="/setup">
+			Name: <input type="text" name="playerName" required="true"> <br><br>
+			Buy chips: $<input type="number" name="accountBalance" required="true" min="0" max="1000000"> <br>
+			<br> <input type="submit" value="Submit">
+		</form>
+	</div>
+{{/preGame}}
+{{#gameOn}}
+<div class="table">	
+		
+		<div class="dealer-side">
+			<div>
+				<b>Dealer</b>
+			</div>
+			<div>
+			{{#showDealerHandScore}}
+				{{#dealer.hand.bestHandScore}}
+					(Hand Score: {{ . }}) 
+				{{/dealer.hand.bestHandScore}}
+			{{/showDealerHandScore}}
+			</div>
+			<br>
+			<div>
+		   		{{#dealer.hand.cards}}
+		   			<span class="card">{{rank}} {{{suitSymbol}}} </span>
+		   		{{/dealer.hand.cards}}
+	   		</div>	
+	   	</div>  
+		<hr>
+		<div class="player-side">
+			<div>
+				{{#user.hand.cards}} 
+					<span class="card">{{rank}} {{{suitSymbol}}}</span>
+				{{/user.hand.cards}}
+			</div>
+			<br>
+			<div>
+				<b>{{#user.playerName }}{{ . }}{{/user.playerName }}</b>
+			</div>
+			<div>
+				{{#user.hand.bestHandScore}} 
+					(Hand Score: {{ . }})
+				{{/user.hand.bestHandScore}}
+			</div>
+			<br>
+			
+		</div>
+		<br>
+	{{#roundState}}
+		<div>
+			<form method="post" action="/hit">
+				  <input type="submit" name="hitButton" value="Hit">
+			</form>
+			<form method="post" action="/stay">
+			 	<input type="submit" name="stayButton" value="Stay">
+			</form>
+		</div>
+	{{/roundState}}
+	<h2>{{#outcomeText}} {{.}} {{/outcomeText}}</h2>	
+	<div>Account Balance: ${{ user.accountBalance }} </div>	
+	<br>
+	{{#betState}}
+		<form method="post" action="/bet">
+			Place your bet:<input required type="number" name="betAmount" min="0" max="{{user.accountBalance}}"> <br>
+			<br> <input type="submit" value="Submit">
+		</form>
+	{{/betState}}
+	
+		<div>{{#currentBet}} Current Bet: {{ . }} {{/currentBet}}</div>
+		<div>Cards Left: {{#deck.cardsLeft}}{{ . }} {{/deck.cardsLeft}}</div>
+</div>
+{{/gameOn}}
 </body>
 </html>

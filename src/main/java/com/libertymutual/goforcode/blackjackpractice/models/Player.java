@@ -6,12 +6,12 @@ public class Player {
 	private double accountBalance;
 	private double betAmount;
 	private Hand hand;
-	
+
 	public Player() {
-		 this.playerName = null;
-		 this.accountBalance = 0.0;
-		 this.betAmount = 0.0;
-		}
+		this.playerName = null;
+		this.accountBalance = 0.00;
+		this.betAmount = 0.00;
+	}
 
 	public String getPlayerName() {
 		return playerName;
@@ -30,7 +30,7 @@ public class Player {
 	}
 
 	public double getBetAmount() {
-		return betAmount;
+			return betAmount;
 	}
 
 	public void setBetAmount(double betAmount) {
@@ -44,11 +44,9 @@ public class Player {
 	public void setHand(Hand hand) {
 		this.hand = hand;
 	}
-	
-//	public int getPlayerHandScore() {
-//		return hand.getBestHandScore();
-//	}
-	
-	
-	
+
+	// public int getPlayerHandScore() {
+	// return hand.getBestHandScore();
+	// }
+
 }
