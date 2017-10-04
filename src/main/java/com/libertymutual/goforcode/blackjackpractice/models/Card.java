@@ -62,16 +62,16 @@ public class Card {
 	public String getSuitSymbol() {
 		String unicodeSuit = "";
 		switch (this.getSuit()) {
-		case "CLUBS": unicodeSuit = "&clubs;";
-				break;
-		case "SPADES": unicodeSuit = "&spades;";
-				break;
-		case "DIAMONDS": unicodeSuit = "&diams;";
-				break;
-		case "HEARTS": unicodeSuit = "&hearts;";
-				break;
-		default: unicodeSuit = "";
-				break;
+			case "CLUBS": unicodeSuit = "&clubs;";
+					break;
+			case "SPADES": unicodeSuit = "&spades;";
+					break;
+			case "DIAMONDS": unicodeSuit = "&diams;";
+					break;
+			case "HEARTS": unicodeSuit = "&hearts;";
+					break;
+			default: unicodeSuit = "";
+					break;
 		}
 		return unicodeSuit;	
 	}

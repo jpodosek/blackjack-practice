@@ -80,6 +80,19 @@ button:active {
   text-align: center;
 }
 
+.suit-top {
+  position: relative;
+  left: 0px;
+  padding-top: 2px;
+}
+
+.suit-bottom {
+  position: relative;
+  right: 0px;
+  padding-bottom: 2px;
+}
+
+
 
 
 

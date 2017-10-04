@@ -42,7 +42,15 @@
 		<div class="player-side">
 			<div>
 				{{#user.hand.cards}} 
-					<span class="card">{{rank}} {{{suitSymbol}}}</span>
+					<span class="card">
+						<span class="suit-top">
+							{{{suitSymbol}}}
+						</span>
+					{{rank}} 
+						<span class="suit-bottom">
+							{{{suitSymbol}}}
+						</span>
+					</span>
 				{{/user.hand.cards}}
 			</div>
 			<br>

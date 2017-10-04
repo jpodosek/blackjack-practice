@@ -17,7 +17,6 @@ public class BlackJackController {
 	private GamePlay gps;
 	
 	BlackJackController() {
-		System.out.println("BlackJackController ran.");
 		gps = new GamePlay();
 		gps.createDealer();
 		gps.createUser();	
@@ -40,8 +39,6 @@ public class BlackJackController {
 		model.addAttribute("currentBet", betAmount);	
 		model.addAttribute("outcomeText", gps.getOutcomeText());
 		model.addAttribute("showDealerHandScore", betAmount == 0 && user.getPlayerName() != null);
-		System.out.print("betAmount: " + betAmount);
-		System.out.println("user.getPlayerName(): " + user.getPlayerName());
 		return "default";
 	}
 
