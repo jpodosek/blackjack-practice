@@ -151,8 +151,6 @@ public class GamePlay {
 		dealer = new Player();
 	}
 
-	
-
 	public Player getUser() {
 		return user;
 	}
